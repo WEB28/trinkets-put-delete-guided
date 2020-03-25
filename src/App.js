@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 import axios from 'axios';
 
 import Home from './components/Home';
@@ -14,7 +14,10 @@ const App = () => {
   useEffect(() => {
     axios
       .get('http://localhost:3333/items')
-      .then(res => setItems(res.data))
+      .then(res => {
+        console.log(`done fetching data`)
+        setItems(res.data)
+      })
       .catch(error => console.log(error));
   }, []);
 
@@ -44,7 +47,7 @@ const App = () => {
         render={props => <Item {...props} items={items} />}
       />
       <Route path="/item-form" component={ItemForm} />
-      <Route path="/update-item/:id" render={props => <UpdateForm {...props} items={items} /> } />
+      <Route path="/update-item/:id" render={props => <UpdateForm {...props} items={items} setItems={setItems} /> } />
     </div>
   );
 };

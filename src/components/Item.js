@@ -6,6 +6,7 @@ import ItemDescription from './ItemDescription';
 import ItemShipping from './ItemShipping';
 
 function Item(props) {
+    console.log(props)
     const item = props.items.find(
         thing => `${thing.id}` === props.match.params.id
     );

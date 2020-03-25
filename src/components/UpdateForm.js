@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams, useHistory } from "react-router-dom";
 import axios from 'axios';
 
 const initialItem = {
@@ -10,6 +11,10 @@ const initialItem = {
 };
 
 const UpdateForm = props => {
+    console.log(props);
+    const { id } = useParams();
+    const { push } = useHistory();
+    // console.log(params);
     const [item, setItem] = useState(initialItem);
 
     const changeHandler = ev => {
@@ -25,9 +30,27 @@ const UpdateForm = props => {
         });
     };
 
+    // get the id from params
+    // loop through the items list to find the item
+    // set the item to state to pre-populate the form
+    useEffect(() => {
+        const itemToUpdate = props.items.find(e => `${e.id}` === id)
+        if(itemToUpdate) {
+            setItem(itemToUpdate);
+        }
+    }, [props.item, id])
+
     const handleSubmit = e => {
         e.preventDefault();
         // make a PUT request to edit the item
+        axios.put(`http://localhost:3333/items/${id}`, item)
+            .then(res => {
+                // update state in App through the setter function
+                console.log(res.data);
+                props.setItems(res.data);
+                push(`/item-list/${id}`)
+            })
+            .catch(err => console.log(err))
     };
 
     return (
