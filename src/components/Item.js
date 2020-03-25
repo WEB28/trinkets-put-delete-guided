@@ -20,6 +20,17 @@ function Item(props) {
         props.history.push(`/update-item/${item.id}`)
     }
 
+    const deleteItem = e => {
+        e.preventDefault();
+        // make an axios.delete request 
+        // in the .then, update state with props.setItems and navigate to teh shop
+        axios.delete(`http://localhost:3333/items/${item.id}`)
+            .then(res => {
+                props.setItems(res.data);
+                props.history.push('/item-list')
+            })
+    }
+
     return (
         <div className="item-wrapper">
         <div className="item-header">
@@ -47,7 +58,7 @@ function Item(props) {
             render={props => <ItemShipping {...props} item={item} />}
         />
         <button className="md-button" onClick={routeToEditForm}>Edit</button>
-        <button className="md-button" >Delete</button>
+        <button className="md-button" onClick={deleteItem}>Delete</button>
         </div>
     );
 }
